@@ -294,11 +294,61 @@
             <scope>test</scope>
         </dependency>
         
+            <dependency>
+                <groupId>de.flapdoodle.embed</groupId>
+                <artifactId>de.flapdoodle.embed.mongo</artifactId>
+                <version>1.44</version>
+                <exclusions>
+                    <exclusion>
+						          <groupId>org.apache.commons</groupId>
+						          <artifactId>commons-lang3</artifactId>
+                    </exclusion>
+                </exclusions>
+	            <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>de.flapdoodle.embed</groupId>
+                <artifactId>de.flapdoodle.embed.process</artifactId>
+                <version>1.37</version>
+                <exclusions>
+                    <exclusion>
+						          <groupId>org.apache.commons</groupId>
+						          <artifactId>commons-lang3</artifactId>
+                    </exclusion>
+                </exclusions>
+	            <scope>test</scope>
+            </dependency>
+
+<!-- real dep -->
+
+            <dependency>
+                <groupId>org.mongodb</groupId>
+                <artifactId>mongo-java-driver</artifactId>
+                <version>2.11.4</version>
+            <scope>provided</scope>
+            </dependency>
+
+
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>15.0</version>
             <scope>provided</scope>
         </dependency>
+
+            <dependency>
+                <groupId>de.flapdoodle.guava</groupId>
+                <artifactId>de.flapdoodle.guava</artifactId>
+                <version>1.4.0</version>
+	            <scope>provided</scope>
+            </dependency>
+
+            <!-- joda time -->
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>2.3</version>
+            </dependency>
+
     </dependencies>
 </project>
