@@ -14,13 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.flapdoodle.data;
+package de.flapdoodle.mongomapper;
 
+import org.junit.Test;
 
-public interface MutableTypedMap extends TypedMap {
+public class TestExampleReadMeCode {
+	// ### Usage
+	// ->
+	// ..
+	// <-
 
-	public <X> X set(Property<X> key, X value);
-
-	TypedMap asImmutable();
+	@Test
+	public void expectOneOrNone() {
+		// ->
+		// <-
+	}
 
 }
