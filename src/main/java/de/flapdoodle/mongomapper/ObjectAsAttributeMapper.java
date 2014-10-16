@@ -3,12 +3,12 @@ package de.flapdoodle.mongomapper;
 import com.google.common.base.Preconditions;
 import com.mongodb.DBObject;
 
-public class ObjectAsAttributeMapper<T> implements AttributeMapper<T> {
+public class ObjectAsAttributeMapper<T,W extends ObjectMapper<T>> implements AttributeMapper<T> {
 
-    private final ObjectMapper<T> mapper;
+    private final W mapper;
     private final String name;
     
-    public ObjectAsAttributeMapper(String name, ObjectMapper<T> mapper) {
+    public ObjectAsAttributeMapper(String name, W mapper) {
         this.name = name;
         this.mapper = mapper;
     }
@@ -18,7 +18,7 @@ public class ObjectAsAttributeMapper<T> implements AttributeMapper<T> {
         return name;
     }
     
-    public ObjectMapper<T> wrapped() {
+    public W wrapped() {
         return mapper;
     }
 

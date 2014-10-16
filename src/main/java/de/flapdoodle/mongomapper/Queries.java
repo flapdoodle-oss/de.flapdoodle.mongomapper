@@ -46,7 +46,7 @@ public abstract class Queries {
         return PropertyNames.name(Varargs.asArray(Varargs.asCollection(mappers, mapper),AttributeMapper.class));
     }
     
-    public static <T, L extends Collection<? extends T>> void isInList(QueryBuilder queryBuilder, ObjectAsAttributeMapper<L> mapper, T v,AttributeMapper<?>... mappers) {
+    public static <T, L extends Collection<? extends T>> void isInList(QueryBuilder queryBuilder, ObjectAsAttributeMapper<L,?> mapper, T v,AttributeMapper<?>... mappers) {
         String propertyName=propertyName(mapper, mappers);
         
         ObjectMapper<T> valueMapper = ((ListWrappingMapper<T>) mapper.wrapped()).wrappedMapper();

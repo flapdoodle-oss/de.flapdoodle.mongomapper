@@ -2,26 +2,26 @@ package de.flapdoodle.mongomapper.example;
 
 import static org.junit.Assert.assertNotNull;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import com.mongodb.DBCollection;
 
 import de.flapdoodle.mongomapper.AbstractMongoDBTest;
-import de.flapdoodle.mongomapper.AbstractStringIdStore;
 
 public class TestSample extends AbstractMongoDBTest {
 
     @Test
     public void storeAndLoadStuff() {
         
-        Root root=new Root("foo",2);
+        Root root=new Root("foo",2, DateTime.now());
         
         DBCollection collection=getMongo().getDB("test").getCollection("roots");
-        AbstractStringIdStore<Root, Root> store = new AbstractStringIdStore<Root, Root>(collection, RootMapper.INSTANCE) {
-            
-        };
+        RootStore store = new RootStore(collection);
+        
+        
         
         assertNotNull(store.store(root));
-        
     }
+    
 }

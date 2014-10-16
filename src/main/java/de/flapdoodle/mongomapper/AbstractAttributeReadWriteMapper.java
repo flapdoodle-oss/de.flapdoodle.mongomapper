@@ -44,4 +44,8 @@ public abstract class AbstractAttributeReadWriteMapper<R,W> extends AbstractMapp
     }
 
     protected abstract R asObject(AttributeValueMap attributes);
+    
+    public ImmutableList<AttributeMapper<?>> mapper() {
+        return mapper;
+    }
 }
