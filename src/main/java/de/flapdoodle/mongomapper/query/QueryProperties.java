@@ -8,22 +8,13 @@ public abstract class QueryProperties {
         // no instance
     }
     
-    public static <T> QueryProperty<T, Void> with(AttributeMapper<T> mapper) {
-        return new SingleProperty<T>(mapper);
+    public static <T> SimpleProperty<T> with(AttributeMapper<T> mapper) {
+        return new SimpleProperty<T>(mapper);
     }
     
-    static class CascadedProperty<T, P> implements QueryProperty<T, P> {
-        
+    public static <T, P extends QueryProperty<?, ? extends QueryProperty<?,?>>> CascadedProperty<T, P> with(P parent, AttributeMapper<T> mapper) {
+        return new CascadedProperty<T,P>(parent, mapper);
     }
     
-    static class SingleProperty<T> implements QueryProperty<T, Void> {
-
-        private AttributeMapper<T> mapper;
-
-        public SingleProperty(AttributeMapper<T> mapper) {
-            this.mapper = mapper;
-        }
-        
-    }
     
 }

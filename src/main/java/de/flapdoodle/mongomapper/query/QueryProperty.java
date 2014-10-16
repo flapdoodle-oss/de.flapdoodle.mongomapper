@@ -1,5 +1,10 @@
 package de.flapdoodle.mongomapper.query;
 
-public interface QueryProperty<T,P> {
+import com.google.common.base.Optional;
+
+public interface QueryProperty<T,P extends QueryProperty<?, ?>> {
     
+    Optional<P> parent();
+
+    String name();
 }
