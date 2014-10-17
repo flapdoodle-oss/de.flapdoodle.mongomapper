@@ -5,9 +5,9 @@ import org.joda.time.DateTime;
 import de.flapdoodle.mongomapper.AbstractAttributeMapper;
 import de.flapdoodle.mongomapper.AttributeMapper;
 import de.flapdoodle.mongomapper.AttributeValueMap;
-import de.flapdoodle.mongomapper.query.CascadedProperty;
 import de.flapdoodle.mongomapper.query.Properties;
 import de.flapdoodle.mongomapper.query.Property;
+import de.flapdoodle.mongomapper.query.QueryableCascadedProperty;
 import de.flapdoodle.mongomapper.query.QueryableProperty;
 import de.flapdoodle.mongomapper.types.DateMapper;
 import de.flapdoodle.mongomapper.types.IntMapper;
@@ -38,7 +38,7 @@ public class QueryableDateMapper extends AbstractAttributeMapper<DateTime> {
         return new Value<P>(parent, this, VALUE);
     }
     
-    public class Value<P extends Property<?, ? extends Property<?,?>>> extends CascadedProperty<DateTime, P> implements QueryableProperty<DateTime, P> {
+    public class Value<P extends Property<?, ? extends Property<?,?>>> extends QueryableCascadedProperty<DateTime, P> {
 
         public Value(P parent, QueryableDateMapper baseMapper, AttributeMapper<DateTime> valueMapper) {
             super(parent, valueMapper);

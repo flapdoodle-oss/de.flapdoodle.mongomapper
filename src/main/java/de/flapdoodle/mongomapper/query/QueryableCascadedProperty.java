@@ -12,5 +12,8 @@ public class QueryableCascadedProperty<T, P extends Property<?, ? extends Proper
         super(parent, mapper);
     }
 
-
+    @Override
+    public AttributeMapper<T> mapper() {
+        return super.mapper();
+    }
 }

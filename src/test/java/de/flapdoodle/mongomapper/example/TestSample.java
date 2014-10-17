@@ -34,7 +34,7 @@ public class TestSample extends AbstractMongoDBTest {
         
         assertEquals("created.year",name(SubMapper.INSTANCE.created().year()));
     }
-
+    
     static String name(QueryableProperty<?, ? extends Property<?,?>> property) {
         if (property.parentProperty().isPresent()) {
             return parentName(property.parentProperty().get())+"."+property.propertyName();

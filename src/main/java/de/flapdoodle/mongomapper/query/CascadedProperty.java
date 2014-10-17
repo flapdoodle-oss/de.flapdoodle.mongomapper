@@ -29,4 +29,8 @@ public class CascadedProperty<T, P extends Property<?, ? extends Property<?,?>>>
         return parent;
     }
     
+    protected AttributeMapper<T> mapper() {
+        return mapper;
+    };
+    
 }
