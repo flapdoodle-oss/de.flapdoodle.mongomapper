@@ -13,6 +13,7 @@ import com.mongodb.QueryBuilder;
 import de.flapdoodle.guava.Varargs;
 import de.flapdoodle.mongomapper.types.DateMapper;
 
+@Deprecated
 public abstract class Queries {
 
     static final DateMapper DATE_MAPPER = new DateMapper("foo");

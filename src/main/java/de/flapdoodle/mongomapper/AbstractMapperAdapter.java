@@ -3,11 +3,14 @@ package de.flapdoodle.mongomapper;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBObject;
+
+import de.flapdoodle.mongomapper.query.Properties;
 
 public abstract class AbstractMapperAdapter<W, R> implements ApplicationStartListener {
     
@@ -97,14 +100,8 @@ public abstract class AbstractMapperAdapter<W, R> implements ApplicationStartLis
         collection.apply(m);
     }
 
-    /**
-     * Erstellt einen DBObject für einen index, wenn dieser unique ist.
-     * @param collection2 
-     *
-     * @param index
-     * @return
-     */
-    private DBObject asIndexOptions(IndexDefinition index) {
+    @VisibleForTesting
+    protected static DBObject asIndexOptions(IndexDefinition index) {
         BasicDBObjectBuilder builder=new BasicDBObjectBuilder();
         if (index.isUnique()) {
             builder.add("unique", true);
@@ -114,13 +111,13 @@ public abstract class AbstractMapperAdapter<W, R> implements ApplicationStartLis
     }
 
     // http://docs.mongodb.org/manual/reference/limits/#Index-Name-Length
-    private String name(IndexDefinition index) {
+    private static String name(IndexDefinition index) {
         StringBuilder sb=new StringBuilder();
         for (IndexedProperty prop : index.properties()) {
             if (sb.length()>0) {
                 sb.append(".");
             }
-            sb.append(prop.name());
+            sb.append(Properties.name(prop.name()).replace(".", "_"));
         }
         String ret = sb.toString();
         if (ret.length()>127) {
@@ -129,15 +126,12 @@ public abstract class AbstractMapperAdapter<W, R> implements ApplicationStartLis
         return ret;
     }
 
-    /**
-     *
-     * @param properies
-     * @return
-     */
-    private DBObject asIndexKeys(ImmutableList<IndexedProperty> properies) {
+    @VisibleForTesting
+    protected static DBObject asIndexKeys(ImmutableList<IndexedProperty> properies) {
+        Preconditions.checkArgument(!properies.isEmpty(),"indexList is empty");
         BasicDBObjectBuilder builder = new BasicDBObjectBuilder();
         for (IndexedProperty p : properies) {
-            builder.add(p.name(), Sort.asDBObjectValue(p.sort()));
+            builder.add(Properties.name(p.name()), Sort.asDBObjectValue(p.sort()));
         }
         return builder.get();
     }

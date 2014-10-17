@@ -1,14 +1,11 @@
 package de.flapdoodle.mongomapper;
 
-import java.util.List;
-
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import de.flapdoodle.mongomapper.query.Properties;
+import de.flapdoodle.mongomapper.query.Property;
 
 public class IndexedProperty {
 
-    private final String name;
+    private final Property<?, ? extends Property<?,?>> name;
     private final Sort.Direction sort;
 
     /**
@@ -18,7 +15,7 @@ public class IndexedProperty {
      * @param name
      * @param sort
      */
-    public IndexedProperty(String name, Sort.Direction sort) {
+    public IndexedProperty(Property<?, ? extends Property<?,?>> name, Sort.Direction sort) {
         this.name = name;
         this.sort = sort;
     }
@@ -28,7 +25,7 @@ public class IndexedProperty {
      *
      * @return
      */
-    public String name() {
+    public Property<?, ? extends Property<?,?>> name() {
         return name;
     }
 
@@ -43,7 +40,7 @@ public class IndexedProperty {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" + name + ":" + sort + ")";
+        return getClass().getSimpleName() + "(" + Properties.name(name) + ":" + sort + ")";
     }
 
     /**
@@ -53,7 +50,7 @@ public class IndexedProperty {
      * @param sort
      * @return IndexedProperty-Instanz
      */
-    public static IndexedProperty property(String name, Sort.Direction sort) {
+    public static IndexedProperty property(Property<?, ? extends Property<?,?>> name, Sort.Direction sort) {
         return new IndexedProperty(name, sort);
     }
 
@@ -63,23 +60,23 @@ public class IndexedProperty {
      * @param name
      * @return IndexedProperty-Instanz
      */
-    public static IndexedProperty property(String name) {
+    public static IndexedProperty property(Property<?, ? extends Property<?,?>> name) {
         return new IndexedProperty(name, Sort.Direction.Ascent);
     }
 
-    /**
-     * Setzt bei einer Liste von IndexedProperty Prefixe
-     *
-     * @param prefix
-     * @param properties
-     * @return
-     */
-    public static ImmutableList<IndexedProperty> prefix(final String prefix, List<IndexedProperty> properties) {
-        return ImmutableList.copyOf(Lists.transform(properties, new Function<IndexedProperty, IndexedProperty>() {
-            @Override
-            public IndexedProperty apply(IndexedProperty source) {
-                return new IndexedProperty(PropertyNames.name(prefix, source.name()), source.sort());
-            }
-        }));
-    }
+//    /**
+//     * Setzt bei einer Liste von IndexedProperty Prefixe
+//     *
+//     * @param prefix
+//     * @param properties
+//     * @return
+//     */
+//    public static ImmutableList<IndexedProperty> prefix(final String prefix, List<IndexedProperty> properties) {
+//        return ImmutableList.copyOf(Lists.transform(properties, new Function<IndexedProperty, IndexedProperty>() {
+//            @Override
+//            public IndexedProperty apply(IndexedProperty source) {
+//                return new IndexedProperty(PropertyNames.name(prefix, source.name()), source.sort());
+//            }
+//        }));
+//    }
 }

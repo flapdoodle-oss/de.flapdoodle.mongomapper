@@ -1,7 +1,6 @@
 package de.flapdoodle.mongomapper;
 
 import java.util.Collection;
-import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -57,28 +56,28 @@ public class IndexDefinition {
         return getClass().getSimpleName() + "(unique: " + unique + ", " + properties + ")";
     }
 
-    /**
-     * Fügt den Properties prefixe an.
-     *
-     * @param prefix
-     * @param indexDefinition
-     * @return
-     */
-    public static IndexDefinition prefix(String prefix, IndexDefinition indexDefinition) {
-        return prefix(prefix, Lists.<IndexedProperty> newArrayList(), indexDefinition);
-    }
+//    /**
+//     * Fügt den Properties prefixe an.
+//     *
+//     * @param prefix
+//     * @param indexDefinition
+//     * @return
+//     */
+//    public static IndexDefinition prefix(String prefix, IndexDefinition indexDefinition) {
+//        return prefix(prefix, Lists.<IndexedProperty> newArrayList(), indexDefinition);
+//    }
 
-    /**
-     * Fügt den Properties Prefixe an
-     *
-     * @param prefix
-     * @param prepend
-     * @param indexDefinition
-     * @return
-     */
-    public static IndexDefinition prefix(String prefix, List<IndexedProperty> prepend, IndexDefinition indexDefinition) {
-        ImmutableList<IndexedProperty> properties = ImmutableList.<IndexedProperty> builder().addAll(prepend)
-                .addAll(IndexedProperty.prefix(prefix, indexDefinition.properties())).build();
-        return new IndexDefinition(indexDefinition.isUnique(), properties);
-    }
+//    /**
+//     * Fügt den Properties Prefixe an
+//     *
+//     * @param prefix
+//     * @param prepend
+//     * @param indexDefinition
+//     * @return
+//     */
+//    public static IndexDefinition prefix(String prefix, List<IndexedProperty> prepend, IndexDefinition indexDefinition) {
+//        ImmutableList<IndexedProperty> properties = ImmutableList.<IndexedProperty> builder().addAll(prepend)
+//                .addAll(IndexedProperty.prefix(prefix, indexDefinition.properties())).build();
+//        return new IndexDefinition(indexDefinition.isUnique(), properties);
+//    }
 }

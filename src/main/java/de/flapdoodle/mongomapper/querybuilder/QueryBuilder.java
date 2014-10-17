@@ -12,6 +12,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.QueryOperators;
 
+import de.flapdoodle.mongomapper.query.Properties;
 import de.flapdoodle.mongomapper.query.Property;
 import de.flapdoodle.mongomapper.query.PropertyNameAndMapper;
 import de.flapdoodle.mongomapper.query.QueryableProperty;
@@ -396,20 +397,6 @@ public class QueryBuilder {
         }
         return _query;
     }
-        
-    static String name(PropertyNameAndMapper<?, ? extends Property<?,?>> property) {
-        if (property.parentProperty().isPresent()) {
-            return parentName(property.parentProperty().get())+"."+property.propertyName();
-        }
-        return property.propertyName();
-    }
-    
-    static String parentName(Property<?, ? extends Property<?,?>> property) {
-        if (property.parentProperty().isPresent()) {
-            return parentName(property.parentProperty().get())+"."+property.propertyName();
-        }
-        return property.propertyName();
-    }
     
     private <T> void addOperand(PropertyNameAndMapper<T, ? extends Property<?,?>>key, boolean not, String op, T v) {
         Object value=key.mapper().asDBobject(v);
@@ -418,7 +405,7 @@ public class QueryBuilder {
 
     private <T> void addOperandUnmapped(PropertyNameAndMapper<T, ? extends Property<?, ?>> key, boolean not, String op,
             Object value) {
-        String _currentKey=name(key);
+        String _currentKey=Properties.name(key);
         boolean _hasNot=not;
         
         if(op == null) {

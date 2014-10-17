@@ -24,4 +24,20 @@ public abstract class Properties {
         return new QueryableCascadedProperty<T,P>(parent, mapper);
     }
     
+    
+    public static String name(Property<?, ? extends Property<?,?>> property) {
+        if (property.parentProperty().isPresent()) {
+            return parentName(property.parentProperty().get())+"."+property.propertyName();
+        }
+        return property.propertyName();
+    }
+    
+    static String parentName(Property<?, ? extends Property<?,?>> property) {
+        if (property.parentProperty().isPresent()) {
+            return parentName(property.parentProperty().get())+"."+property.propertyName();
+        }
+        return property.propertyName();
+    }
+    
+
 }
