@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.QueryOperators;
@@ -60,7 +63,7 @@ public class QueryBuilder {
      * @return Returns the current QueryBuilder with an appended "greater than" query  
      */
     public <T> QueryBuilder greaterThan(QueryableProperty<T, ? extends Property<?, ?>> key, T object) {
-        addOperand(key, QueryOperators.GT, object);
+        addOperand(key, false, QueryOperators.GT, object);
         return this;
     }
         
@@ -70,7 +73,7 @@ public class QueryBuilder {
      * @return Returns the current QueryBuilder with an appended "greater than or equals" query
      */
     public <T> QueryBuilder greaterThanEquals(QueryableProperty<T, ? extends Property<?, ?>> key, T object) {
-        addOperand(key, QueryOperators.GTE, object);
+        addOperand(key, false, QueryOperators.GTE, object);
         return this;
     }
         
@@ -80,7 +83,7 @@ public class QueryBuilder {
      * @return Returns the current QueryBuilder with an appended "less than" query
      */
     public <T> QueryBuilder lessThan(QueryableProperty<T, ? extends Property<?, ?>> key, T object) {
-        addOperand(key, QueryOperators.LT, object);
+        addOperand(key, false, QueryOperators.LT, object);
         return this;
     }
         
@@ -90,7 +93,7 @@ public class QueryBuilder {
      * @return Returns the current QueryBuilder with an appended "less than or equals" query
      */
     public <T> QueryBuilder lessThanEquals(QueryableProperty<T, ? extends Property<?, ?>> key, T object) {
-        addOperand(key, QueryOperators.LTE, object);
+        addOperand(key, false, QueryOperators.LTE, object);
         return this;
     }
         
@@ -100,7 +103,17 @@ public class QueryBuilder {
      * @return Returns the current QueryBuilder with an appended equality query
      */
     public <T> QueryBuilder is(QueryableProperty<T, ? extends Property<?, ?>> key, T object) {
-        addOperand(key, null, object);
+        addOperand(key, false, null, object);
+        return this;
+    }
+        
+    /**
+     * Equivalent of the find({key:value})
+     * @param object Value to query
+     * @return Returns the current QueryBuilder with an appended equality query
+     */
+    public <T> QueryBuilder isNot(QueryableProperty<T, ? extends Property<?, ?>> key, T object) {
+        addOperand(key, true, null, object);
         return this;
     }
         
@@ -110,7 +123,7 @@ public class QueryBuilder {
      * @return Returns the current QueryBuilder with an appended inequality query
      */
     public <T> QueryBuilder notEquals(QueryableProperty<T, ? extends Property<?, ?>> key, T object) {
-        addOperand(key, QueryOperators.NE, object);
+        addOperand(key, false, QueryOperators.NE, object);
         return this;
     }
         
@@ -119,8 +132,8 @@ public class QueryBuilder {
      * @param object Value to query
      * @return Returns the current QueryBuilder with an appended "in array" query
      */
-    public <T> QueryBuilder in(QueryableProperty<T, ? extends Property<?, ?>> key, T object) {
-        addOperand(key, QueryOperators.IN, object);
+    public <T> QueryBuilder in(final QueryableProperty<T, ? extends Property<?, ?>> key, Iterable<T> src) {
+        addOperandUnmapped(key, false, QueryOperators.IN, mapAsList(key, src));
         return this;
     }
         
@@ -129,8 +142,23 @@ public class QueryBuilder {
      * @param object Value to query
      * @return Returns the current QueryBuilder with an appended "not in array" query
      */
-    public <T> QueryBuilder notIn(QueryableProperty<T, ? extends Property<?, ?>> key, T object) {
-        addOperand(key, QueryOperators.NIN, object);
+    public <T> QueryBuilder notIn(QueryableProperty<T, ? extends Property<?, ?>> key, Iterable<T> src) {
+        addOperandUnmapped(key, false, QueryOperators.NIN, mapAsList(key, src));
+        return this;
+    }
+
+    private <T> ArrayList<Object> mapAsList(QueryableProperty<T, ? extends Property<?, ?>> key,
+            Iterable<T> src) {
+        return Lists.newArrayList(Iterables.transform(src, new ApplyMapper<T>(key)));
+    }
+        
+    /**
+     * Equivalent of the $mod operand
+     * @param object Value to query
+     * @return Returns the current QueryBuilder with an appended modulo query
+     */
+    public <T extends Number> QueryBuilder mod(QueryableProperty<T, ? extends Property<?, ?>> key, T object) {
+        addOperand(key, false, QueryOperators.MOD, object);
         return this;
     }
         
@@ -139,18 +167,17 @@ public class QueryBuilder {
      * @param object Value to query
      * @return Returns the current QueryBuilder with an appended modulo query
      */
-    public <T> QueryBuilder mod(QueryableProperty<T, ? extends Property<?, ?>> key, T object) {
-        addOperand(key, QueryOperators.MOD, object);
+    public <T extends Number> QueryBuilder modNot(QueryableProperty<T, ? extends Property<?, ?>> key, T object) {
+        addOperand(key, true, QueryOperators.MOD, object);
         return this;
     }
-        
     /**
      * Equivalent of the $all operand
      * @param object Value to query
      * @return Returns the current QueryBuilder with an appended "matches all array contents" query
      */
-    public <T> QueryBuilder all(QueryableProperty<T, ? extends Property<?, ?>> key, T object) {
-        addOperand(key, QueryOperators.ALL, object);
+    public <T> QueryBuilder all(QueryableProperty<T, ? extends Property<?, ?>> key, Iterable<T> src) {
+        addOperandUnmapped(key, false, QueryOperators.ALL, mapAsList(key, src));
         return this;
     }
         
@@ -159,8 +186,18 @@ public class QueryBuilder {
      * @param object Value to query
      * @return Returns the current QueryBuilder with an appended size operator
      */
-    public <T> QueryBuilder size(QueryableProperty<T, ? extends Property<?, ?>> key, T object) {
-        addOperand(key, QueryOperators.SIZE, object);
+    public <T> QueryBuilder size(QueryableProperty<T, ? extends Property<?, ?>> key, Long object) {
+        addOperandUnmapped(key, false, QueryOperators.SIZE, object);
+        return this;
+    }
+        
+    /**
+     * Equivalent of the $size operand
+     * @param object Value to query
+     * @return Returns the current QueryBuilder with an appended size operator
+     */
+    public <T> QueryBuilder sizeNot(QueryableProperty<T, ? extends Property<?, ?>> key, Long object) {
+        addOperandUnmapped(key, true, QueryOperators.SIZE, object);
         return this;
     }
         
@@ -180,7 +217,7 @@ public class QueryBuilder {
      * @return Returns the current QueryBuilder with an appended regex query
      */
     public QueryBuilder regex(QueryableProperty<String, ? extends Property<?, ?>> key, Pattern regex) {
-        addOperandUnmapped(key, null, regex);
+        addOperandUnmapped(key, false, null, regex);
         return this;
     }
 
@@ -302,16 +339,16 @@ public class QueryBuilder {
 //        return this;
 //    }
 
-    /**
-     * Equivalent to $not meta operator. Must be followed by an operand, not a value, e.g.
-     * {@code QueryBuilder.start("val").not().mod(Arrays.asList(10, 1)) }
-     *
-     * @return Returns the current QueryBuilder with an appended "not" meta operator
-     */
-    public QueryBuilder not() {
-        _hasNot = true;
-        return this;
-    }
+//    /**
+//     * Equivalent to $not meta operator. Must be followed by an operand, not a value, e.g.
+//     * {@code QueryBuilder.start("val").not().mod(Arrays.asList(10, 1)) }
+//     *
+//     * @return Returns the current QueryBuilder with an appended "not" meta operator
+//     */
+//    public QueryBuilder not() {
+//        _hasNot = true;
+//        return this;
+//    }
 
     /**
      * Equivalent to an $or operand
@@ -373,14 +410,15 @@ public class QueryBuilder {
         return property.propertyName();
     }
     
-    private <T> void addOperand(QueryableProperty<T, ? extends Property<?,?>>key, String op, T v) {
+    private <T> void addOperand(QueryableProperty<T, ? extends Property<?,?>>key, boolean not, String op, T v) {
         Object value=key.mapper().asDBobject(v);
-        addOperandUnmapped(key, op, value);
+        addOperandUnmapped(key, not, op, value);
     }
 
-    private <T> void addOperandUnmapped(QueryableProperty<T, ? extends Property<?, ?>> key, String op,
+    private <T> void addOperandUnmapped(QueryableProperty<T, ? extends Property<?, ?>> key, boolean not, String op,
             Object value) {
         String _currentKey=name(key);
+        boolean _hasNot=not;
         
         if(op == null) {
             if (_hasNot) {
@@ -410,6 +448,18 @@ public class QueryBuilder {
         }
         operand.put(op, value);
     }
+    private final class ApplyMapper<T> implements Function<T, Object> {
+        private final QueryableProperty<T, ? extends Property<?, ?>> key;
+
+        private ApplyMapper(QueryableProperty<T, ? extends Property<?, ?>> key) {
+            this.key = key;
+        }
+
+        @Override
+        public Object apply(T input) {
+            return key.mapper().asDBobject(input);
+        }
+    }
     @SuppressWarnings("serial")
         static class QueryBuilderException extends RuntimeException {
             QueryBuilderException(String message) {
@@ -420,7 +470,7 @@ public class QueryBuilder {
         
     private DBObject _query;
 //    private String _currentKey;
-    private boolean _hasNot;
+//    private boolean _hasNot;
         
 
 }
