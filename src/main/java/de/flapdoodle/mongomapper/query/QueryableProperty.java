@@ -1,9 +1,7 @@
 package de.flapdoodle.mongomapper.query;
 
-import de.flapdoodle.mongomapper.AttributeMapper;
 
 
-public interface QueryableProperty<T,P extends Property<?, ?>> extends Property<T, P> {
+public interface QueryableProperty<T,P extends Property<?, ?>> extends Property<T, P>,PropertyNameAndMapper<T,P> {
     
-    AttributeMapper<T> mapper();
 }

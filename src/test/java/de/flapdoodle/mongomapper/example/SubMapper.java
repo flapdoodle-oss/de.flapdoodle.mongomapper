@@ -5,9 +5,12 @@ import org.joda.time.DateTime;
 import com.google.common.base.Optional;
 
 import de.flapdoodle.mongomapper.AbstractAttributeMapper;
+import de.flapdoodle.mongomapper.AttributeMapper;
 import de.flapdoodle.mongomapper.AttributeValueMap;
 import de.flapdoodle.mongomapper.ObjectAsAttributeMapper;
 import de.flapdoodle.mongomapper.composite.QueryableDateMapper;
+import de.flapdoodle.mongomapper.query.CascadedProperty;
+import de.flapdoodle.mongomapper.query.CompositeProperty;
 import de.flapdoodle.mongomapper.query.Properties;
 import de.flapdoodle.mongomapper.query.Property;
 import de.flapdoodle.mongomapper.query.QueryableProperty;
@@ -46,34 +49,27 @@ public class SubMapper extends AbstractAttributeMapper<Sub> {
         return new Sub(attributes.get(name), attributes.get(created));
     }
 
-    public <P extends Property<?,? extends Property<?,?>>> Props<P> properties(P parent) {
-        return new Props<>(parent);
+    public <P extends Property<?,? extends Property<?,?>>> Props<P> properties(Optional<P> parent, AttributeMapper<Sub> mapper) {
+        return new Props<P>(parent, mapper);
     }
     
-    public static class Props<P extends Property<?, ? extends Property<?,?>>> implements Property<Sub,P> {
-
-        private P parent;
-
-        public Props(P parent) {
-            this.parent = parent;
+    public static class Props<P extends Property<?, ? extends Property<?,?>>> extends CascadedProperty<Sub,P> implements CompositeProperty<Sub, P> {
+        
+        public Props(Optional<P> parent, AttributeMapper<Sub> mapper) {
+            super(parent, mapper);
         }
 
-        @Override
-        public Optional<P> parentProperty() {
-            return Optional.of(parent);
-        }
-
-        @Override
-        public String propertyName() {
-            throw new IllegalArgumentException("hmmm..");
-        }
-
-        public QueryableProperty<String, P> name() {
-            return Properties.queryable(parent, name);
+        public QueryableProperty<String, Props<P>> name() {
+            return Properties.queryable(this, name);
         }
         
-        public QueryableDateMapper.Value<? extends Property<DateTime, P>> created() {
-            return created.wrapped().value(Properties.with(parent, created));
+        public QueryableDateMapper.Value<? extends Property<DateTime, Props<P>>> created() {
+            return created.wrapped().value(Properties.with(this, created));
+        }
+        
+        @Override
+        public AttributeMapper<Sub> mapper() {
+            return super.mapper();
         }
     }
 

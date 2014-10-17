@@ -36,8 +36,8 @@ public class RootMapper extends AbstractAttributeMapper<Root> {
         return Properties.queryable(bar);
     }
     
-    public SubMapper.Props<Property<Sub, VoidProperty>> sub() {
-        return sub.wrapped().properties(Properties.with(sub));
+    public SubMapper.Props<VoidProperty> sub() {
+        return sub.wrapped().properties(Optional.<VoidProperty>absent(), sub);
     }
     
     public QueryableDateMapper.Value<Property<DateTime, VoidProperty>> created() {

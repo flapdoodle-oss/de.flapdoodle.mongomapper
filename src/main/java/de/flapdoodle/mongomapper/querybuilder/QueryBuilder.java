@@ -13,6 +13,7 @@ import com.mongodb.DBObject;
 import com.mongodb.QueryOperators;
 
 import de.flapdoodle.mongomapper.query.Property;
+import de.flapdoodle.mongomapper.query.PropertyNameAndMapper;
 import de.flapdoodle.mongomapper.query.QueryableProperty;
 
 public class QueryBuilder {
@@ -201,15 +202,15 @@ public class QueryBuilder {
         return this;
     }
         
-//    /**
-//     * Equivalent of the $exists operand
-//     * @param object Value to query
-//     * @return Returns the current QueryBuilder with an appended exists operator
-//     */
-//    public <T> QueryBuilder exists(QueryableProperty<T, ? extends Property<?, ?>> key, boolean object) {
-//        addOperand(key, QueryOperators.EXISTS, object);
-//        return this;
-//    }
+    /**
+     * Equivalent of the $exists operand
+     * @param object Value to query
+     * @return Returns the current QueryBuilder with an appended exists operator
+     */
+    public <T> QueryBuilder exists(QueryableProperty<T, ? extends Property<?, ?>> key, boolean object) {
+        addOperandUnmapped(key, false, QueryOperators.EXISTS, object);
+        return this;
+    }
         
     /**
      * Passes a regular expression for a query
@@ -226,8 +227,8 @@ public class QueryBuilder {
 //     * @param match  the object to match
 //     * @return Returns the current QueryBuilder with an appended elemMatch operator
 //     */
-//    public QueryBuilder elemMatch(final DBObject match) {
-//        addOperandUnmapped(QueryOperators.ELEM_MATCH, match);
+//    public <T> QueryBuilder elemMatch(CompositeProperty<T, ? extends Property<?, ?>> key, T match) {
+//        addOperand(key, false, QueryOperators.ELEM_MATCH, match);
 //        return this;
 //    }
 
@@ -396,7 +397,7 @@ public class QueryBuilder {
         return _query;
     }
         
-    static String name(QueryableProperty<?, ? extends Property<?,?>> property) {
+    static String name(PropertyNameAndMapper<?, ? extends Property<?,?>> property) {
         if (property.parentProperty().isPresent()) {
             return parentName(property.parentProperty().get())+"."+property.propertyName();
         }
@@ -410,12 +411,12 @@ public class QueryBuilder {
         return property.propertyName();
     }
     
-    private <T> void addOperand(QueryableProperty<T, ? extends Property<?,?>>key, boolean not, String op, T v) {
+    private <T> void addOperand(PropertyNameAndMapper<T, ? extends Property<?,?>>key, boolean not, String op, T v) {
         Object value=key.mapper().asDBobject(v);
         addOperandUnmapped(key, not, op, value);
     }
 
-    private <T> void addOperandUnmapped(QueryableProperty<T, ? extends Property<?, ?>> key, boolean not, String op,
+    private <T> void addOperandUnmapped(PropertyNameAndMapper<T, ? extends Property<?, ?>> key, boolean not, String op,
             Object value) {
         String _currentKey=name(key);
         boolean _hasNot=not;
