@@ -16,9 +16,11 @@ public class QueryableDateMapper extends AbstractAttributeMapper<DateTime> {
 
     private static final DateMapper VALUE=new DateMapper("value");
     private static final IntMapper YEAR=new IntMapper("year");
+    private static final IntMapper DAY=new IntMapper("day");
+    private static final IntMapper MONTH=new IntMapper("month");
     
     public QueryableDateMapper() {
-        super(VALUE,YEAR);
+        super(VALUE,YEAR,DAY,MONTH);
     }
 
     @Override
@@ -26,6 +28,8 @@ public class QueryableDateMapper extends AbstractAttributeMapper<DateTime> {
         return new AttributeValueMap.Builder()
             .put(VALUE, value)
             .put(YEAR, value.year().get())
+            .put(MONTH, value.monthOfYear().get())
+            .put(DAY, value.dayOfYear().get())
             .build();
     }
 
@@ -47,6 +51,12 @@ public class QueryableDateMapper extends AbstractAttributeMapper<DateTime> {
         
         public QueryableProperty<Integer, P> year() {
             return Properties.queryable(this.parentProperty().get(), YEAR);
+        }
+        public QueryableProperty<Integer, P> month() {
+            return Properties.queryable(this.parentProperty().get(), MONTH);
+        }
+        public QueryableProperty<Integer, P> day() {
+            return Properties.queryable(this.parentProperty().get(), DAY);
         }
     }
 }
