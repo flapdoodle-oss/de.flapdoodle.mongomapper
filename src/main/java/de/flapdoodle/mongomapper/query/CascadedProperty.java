@@ -20,12 +20,12 @@ public class CascadedProperty<T, P extends Property<?, ? extends Property<?,?>>>
     }
     
     @Override
-    public String name() {
+    public String propertyName() {
         return mapper.name();
     }
     
     @Override
-    public Optional<P> parent() {
+    public Optional<P> parentProperty() {
         return parent;
     }
     

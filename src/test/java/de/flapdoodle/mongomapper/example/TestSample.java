@@ -16,7 +16,6 @@ public class TestSample extends AbstractMongoDBTest {
 
     @Test
     public void storeAndLoadStuff() {
-        
         Root root=new Root("foo",2, DateTime.now());
         
         DBCollection collection=getMongo().getDB("test").getCollection("roots");
@@ -27,25 +26,26 @@ public class TestSample extends AbstractMongoDBTest {
     
     @Test
     public void queryStuff() {
+        assertEquals("created.value",name(RootMapper.INSTANCE.created()));
+        assertEquals("created.year",name(RootMapper.INSTANCE.created().year()));
         
-        String createdName=name(RootMapper.INSTANCE.created());
-        String yearName=name(RootMapper.INSTANCE.created().year());
-
-        assertEquals("created.value",createdName);
-        assertEquals("created.year",yearName);
+        assertEquals("sub.created.value",name(RootMapper.INSTANCE.sub().created()));
+        assertEquals("sub.created.year",name(RootMapper.INSTANCE.sub().created().year()));
+        
+        assertEquals("created.year",name(SubMapper.INSTANCE.created().year()));
     }
 
     static String name(QueryableProperty<?, ? extends Property<?,?>> property) {
-        if (property.parent().isPresent()) {
-            return name(property.parent().get())+"."+property.name();
+        if (property.parentProperty().isPresent()) {
+            return parentName(property.parentProperty().get())+"."+property.propertyName();
         }
-        return property.name();
+        return property.propertyName();
     }
     
-    static String name(Property<?, ? extends Property<?,?>> property) {
-        if (property.parent().isPresent()) {
-            return name(property.parent().get())+"."+property.name();
+    static String parentName(Property<?, ? extends Property<?,?>> property) {
+        if (property.parentProperty().isPresent()) {
+            return parentName(property.parentProperty().get())+"."+property.propertyName();
         }
-        return property.name();
+        return property.propertyName();
     }
 }

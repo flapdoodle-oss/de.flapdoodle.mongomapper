@@ -8,6 +8,10 @@ public abstract class Properties {
         // no instance
     }
     
+    public static <T> Property<T, VoidProperty> with(AttributeMapper<T> mapper) {
+        return new CascadedProperty<T, VoidProperty>(mapper);
+    }
+    
     public static <T> QueryableProperty<T, VoidProperty> queryable(AttributeMapper<T> mapper) {
         return new QueryableCascadedProperty<T, VoidProperty>(mapper);
     }

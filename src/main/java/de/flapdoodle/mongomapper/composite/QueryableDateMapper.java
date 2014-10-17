@@ -46,7 +46,7 @@ public class QueryableDateMapper extends AbstractAttributeMapper<DateTime> {
         }
         
         public QueryableProperty<Integer, P> year() {
-            return Properties.queryable(this.parent().get(), YEAR);
+            return Properties.queryable(this.parentProperty().get(), YEAR);
         }
     }
 }
