@@ -4,7 +4,7 @@ import com.google.common.base.Optional;
 
 import de.flapdoodle.mongomapper.AttributeMapper;
 
-public class CascadedProperty<T, P extends QueryProperty<?, ? extends QueryProperty<?,?>>> implements QueryProperty<T, P> {
+public class CascadedProperty<T, P extends Property<?, ? extends Property<?,?>>> implements Property<T, P> {
 
     private Optional<P> parent;
     private AttributeMapper<T> mapper;

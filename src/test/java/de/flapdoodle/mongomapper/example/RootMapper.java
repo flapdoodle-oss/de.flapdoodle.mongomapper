@@ -7,8 +7,8 @@ import de.flapdoodle.mongomapper.AttributeValueMap;
 import de.flapdoodle.mongomapper.ObjectAsAttributeMapper;
 import de.flapdoodle.mongomapper.composite.QueryableDateMapper;
 import de.flapdoodle.mongomapper.query.CascadedProperty;
-import de.flapdoodle.mongomapper.query.QueryProperties;
-import de.flapdoodle.mongomapper.query.SimpleProperty;
+import de.flapdoodle.mongomapper.query.Properties;
+import de.flapdoodle.mongomapper.query.QueryableProperty;
 import de.flapdoodle.mongomapper.query.VoidProperty;
 import de.flapdoodle.mongomapper.types.IntMapper;
 import de.flapdoodle.mongomapper.types.StringMapper;
@@ -25,15 +25,15 @@ public class RootMapper extends AbstractAttributeMapper<Root> {
         super(foo,bar,created);
     }
 
-    public SimpleProperty<String> foo() {
-        return QueryProperties.with(foo);
+    public QueryableProperty<String, VoidProperty> foo() {
+        return Properties.queryable(foo);
     }
     
-    public SimpleProperty<Integer> bar() {
-        return QueryProperties.with(bar);
+    public QueryableProperty<Integer, VoidProperty> bar() {
+        return Properties.queryable(bar);
     }
     
-    public QueryableDateMapper.Properties<CascadedProperty<DateTime, VoidProperty>> created() {
+    public QueryableDateMapper.Value<CascadedProperty<DateTime, VoidProperty>> created() {
         return created.wrapped().value(new CascadedProperty<DateTime, VoidProperty>(created));
     }
     

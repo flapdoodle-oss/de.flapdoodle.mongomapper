@@ -6,8 +6,9 @@ import de.flapdoodle.mongomapper.AbstractAttributeMapper;
 import de.flapdoodle.mongomapper.AttributeMapper;
 import de.flapdoodle.mongomapper.AttributeValueMap;
 import de.flapdoodle.mongomapper.query.CascadedProperty;
-import de.flapdoodle.mongomapper.query.QueryProperties;
-import de.flapdoodle.mongomapper.query.QueryProperty;
+import de.flapdoodle.mongomapper.query.Properties;
+import de.flapdoodle.mongomapper.query.Property;
+import de.flapdoodle.mongomapper.query.QueryableProperty;
 import de.flapdoodle.mongomapper.types.DateMapper;
 import de.flapdoodle.mongomapper.types.IntMapper;
 
@@ -33,19 +34,19 @@ public class QueryableDateMapper extends AbstractAttributeMapper<DateTime> {
         return attributes.get(VALUE);
     }
 
-    public <P extends QueryProperty<?, ? extends QueryProperty<?,?>>> Properties<P> value(P parent) {
-        return new Properties<P>(parent, this, VALUE);
+    public <P extends Property<?, ? extends Property<?,?>>> Value<P> value(P parent) {
+        return new Value<P>(parent, this, VALUE);
     }
     
-    public class Properties<P extends QueryProperty<?, ? extends QueryProperty<?,?>>> extends CascadedProperty<DateTime, P> {
+    public class Value<P extends Property<?, ? extends Property<?,?>>> extends CascadedProperty<DateTime, P> implements QueryableProperty<DateTime, P> {
 
-        public Properties(P parent, QueryableDateMapper baseMapper, AttributeMapper<DateTime> valueMapper) {
+        public Value(P parent, QueryableDateMapper baseMapper, AttributeMapper<DateTime> valueMapper) {
             super(parent, valueMapper);
             
         }
         
-        public CascadedProperty<Integer, P> year() {
-            return QueryProperties.with(this.parent().get(), YEAR);
+        public QueryableProperty<Integer, P> year() {
+            return Properties.queryable(this.parent().get(), YEAR);
         }
     }
 }
