@@ -4,11 +4,11 @@ import com.google.common.collect.ImmutableList;
 import com.mongodb.BasicDBList;
 import com.mongodb.DBObject;
 
-public abstract class AbstractListMapper<T,S> extends AbstractMapper implements ObjectMapper<T>, ListWrappingMapper<S> {
+public abstract class AbstractListMapper<T,S,W extends ObjectMapper<S>> extends AbstractMapper implements ObjectMapper<T>, ListWrappingMapper<S> {
 
-    private final ObjectMapper<S> subMapper;
+    private final W subMapper;
 
-    public AbstractListMapper(ObjectMapper<S> subMapper) {
+    public AbstractListMapper(W subMapper) {
         this.subMapper = subMapper;
     }
     
@@ -47,7 +47,7 @@ public abstract class AbstractListMapper<T,S> extends AbstractMapper implements 
     protected abstract ImmutableList<S> asList(T value);
     
     @Override
-    public ObjectMapper<S> wrappedMapper() {
+    public W wrappedMapper() {
         return subMapper;
     }
 }

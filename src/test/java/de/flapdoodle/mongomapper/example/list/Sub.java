@@ -1,4 +1,4 @@
-package de.flapdoodle.mongomapper.example;
+package de.flapdoodle.mongomapper.example.list;
 
 import org.joda.time.DateTime;
 

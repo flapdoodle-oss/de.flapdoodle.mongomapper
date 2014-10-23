@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.google.common.collect.Lists;
 import com.mongodb.DBObject;
 
-import de.flapdoodle.mongomapper.example.RootMapper;
+import de.flapdoodle.mongomapper.example.tree.RootMapper;
 
 public class QueryBuilderTest {
 
@@ -18,6 +18,7 @@ public class QueryBuilderTest {
         
         DBObject query = new QueryBuilder()
             .is(mapper.created(), DateTime.now())
+            .is(mapper.created().year(), 2013)
             .isNot(mapper.foo(), "nix")
             .is(mapper.bar(), 2)
             .is(mapper.sub().created().year(), 2014)

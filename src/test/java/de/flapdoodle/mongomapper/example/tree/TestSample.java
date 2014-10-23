@@ -1,4 +1,4 @@
-package de.flapdoodle.mongomapper.example;
+package de.flapdoodle.mongomapper.example.tree;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

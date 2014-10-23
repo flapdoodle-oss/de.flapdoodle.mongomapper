@@ -3,9 +3,9 @@ package de.flapdoodle.mongomapper;
 import com.google.common.collect.ImmutableList;
 
 
-public class ListMapper<T> extends AbstractListMapper<ImmutableList<? extends T>,T>  {
+public class ListMapper<T,W extends ObjectMapper<T>> extends AbstractListMapper<ImmutableList<? extends T>,T,W>  {
 
-    public ListMapper(ObjectMapper<T> subMapper) {
+    public ListMapper(W subMapper) {
         super(subMapper);
     }
 

@@ -1,20 +1,16 @@
-package de.flapdoodle.mongomapper.example;
+package de.flapdoodle.mongomapper.example.list;
 
 import org.joda.time.DateTime;
 
-import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 
 public class Root {
     private final String foo;
     private final int bar;
     private final DateTime created;
-    private final Optional<Sub> sub;
+    private final ImmutableList<? extends Sub> sub;
     
-    public Root(String foo, int bar, DateTime created) {
-        this(foo,bar, created, Optional.<Sub>absent());
-    }
-    
-    public Root(String foo, int bar, DateTime created, Optional<Sub> sub) {
+    public Root(String foo, int bar, DateTime created, ImmutableList<? extends Sub> sub) {
         this.foo = foo;
         this.bar = bar;
         this.created = created;
@@ -34,7 +30,7 @@ public class Root {
         return created;
     }
     
-    public Optional<Sub> sub() {
+    public ImmutableList<? extends Sub> sub() {
         return sub;
     }
 }
