@@ -399,7 +399,7 @@ public class QueryBuilder {
     }
     
     private <T> void addOperand(PropertyNameAndMapper<T, ? extends Property<?,?>>key, boolean not, String op, T v) {
-        Object value=key.mapper().asDBobject(v);
+        Object value=key.mapper().asDBObject(v);
         addOperandUnmapped(key, not, op, value);
     }
 
@@ -445,7 +445,7 @@ public class QueryBuilder {
 
         @Override
         public Object apply(T input) {
-            return key.mapper().asDBobject(input);
+            return key.mapper().asDBObject(input);
         }
     }
     @SuppressWarnings("serial")

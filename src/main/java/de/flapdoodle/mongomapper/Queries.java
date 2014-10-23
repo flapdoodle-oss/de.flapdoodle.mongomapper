@@ -36,7 +36,7 @@ public abstract class Queries {
 
     public static <T> void is(QueryBuilder queryBuilder, AttributeMapper<T> mapper, T v,AttributeMapper<?>... mappers) {
         String propertyName=propertyName(mapper, mappers);
-        queryBuilder.put(propertyName).is(mapper.asDBobject(v));
+        queryBuilder.put(propertyName).is(mapper.asDBObject(v));
     }
 
     public static <T> void isWithMapper(QueryBuilder queryBuilder, AttributeMapper<T> mapper, T v,AttributeMapper<?>... mappers) {
@@ -64,7 +64,7 @@ public abstract class Queries {
     public static <T> void inList(QueryBuilder queryBuilder, AttributeMapper<? super ImmutableList<? extends T>> mapper, Collection<? extends T> values, AttributeMapper<?> ... mappers) {
         if (!values.isEmpty()) {
             String propertyName=propertyName(mapper, mappers);
-            queryBuilder.put(propertyName).in(mapper.asDBobject(ImmutableList.copyOf(values)));
+            queryBuilder.put(propertyName).in(mapper.asDBObject(ImmutableList.copyOf(values)));
         }
     }
     
@@ -90,20 +90,20 @@ public abstract class Queries {
             if (interval.hasLowerBound()) {
                 switch (interval.lowerBoundType()) {
                 case CLOSED:
-                    queryBuilder.put(property).greaterThanEquals(DATE_MAPPER.asDBobject(interval.lowerEndpoint()));
+                    queryBuilder.put(property).greaterThanEquals(DATE_MAPPER.asDBObject(interval.lowerEndpoint()));
                     break;
                 case OPEN:
-                    queryBuilder.put(property).greaterThan(DATE_MAPPER.asDBobject(interval.lowerEndpoint()));
+                    queryBuilder.put(property).greaterThan(DATE_MAPPER.asDBObject(interval.lowerEndpoint()));
                     break;
                 }
             }
             if (interval.hasUpperBound()) {
                 switch (interval.upperBoundType()) {
                 case CLOSED:
-                    queryBuilder.put(property).lessThanEquals(DATE_MAPPER.asDBobject(interval.upperEndpoint()));
+                    queryBuilder.put(property).lessThanEquals(DATE_MAPPER.asDBObject(interval.upperEndpoint()));
                     break;
                 case OPEN:
-                    queryBuilder.put(property).lessThan(DATE_MAPPER.asDBobject(interval.upperEndpoint()));
+                    queryBuilder.put(property).lessThan(DATE_MAPPER.asDBObject(interval.upperEndpoint()));
                     break;
                 }
             }

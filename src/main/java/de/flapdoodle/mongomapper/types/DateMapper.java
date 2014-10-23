@@ -22,7 +22,7 @@ public class DateMapper implements AttributeMapper<DateTime> {
     }
 
     @Override
-    public Object asDBobject(DateTime value) {
+    public Object asDBObject(DateTime value) {
         return value != null ? dateAsDBObject(value) : null;
     }
 

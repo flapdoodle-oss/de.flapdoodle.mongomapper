@@ -16,7 +16,7 @@ public final class StringMapper implements AttributeMapper<String> {
     }
 
     @Override
-    public Object asDBobject(String value) {
+    public Object asDBObject(String value) {
         return value;
     }
 

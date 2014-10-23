@@ -52,7 +52,7 @@ public abstract class AttributeMappers {
         for (AttributeMapper m : mapper) {
             Object value = attributes.get(m);
             if (value!=null) {
-                builder.add(m.name(), m.asDBobject(value));
+                builder.add(m.name(), m.asDBObject(value));
             }
         }
         
@@ -74,14 +74,16 @@ public abstract class AttributeMappers {
     
     public static <T> Function<T,Object> asDBObjectFunction(final AttributeMapper<T> mapper) {
         return new Function<T, Object>() {
+            @Override
             public Object apply(T input) {
-                return mapper.asDBobject(input);
+                return mapper.asDBObject(input);
             };
         };
     }
 
     public static <T> Function<Object,T> asObjectFunction(final AttributeMapper<T> mapper) {
         return new Function<Object, T>() {
+            @Override
             public T apply(Object input) {
                 return mapper.asObject(input);
             };

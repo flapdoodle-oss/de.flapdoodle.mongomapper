@@ -16,7 +16,7 @@ public final class IntMapper implements AttributeMapper<Integer> {
     }
 
     @Override
-    public Object asDBobject(Integer value) {
+    public Object asDBObject(Integer value) {
         return value;
     }
 

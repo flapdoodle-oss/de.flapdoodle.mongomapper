@@ -17,7 +17,7 @@ public final class BooleanMapper implements AttributeMapper<Boolean> {
     }
 
     @Override
-    public Object asDBobject(Boolean value) {
+    public Object asDBObject(Boolean value) {
         return value;
     }
 

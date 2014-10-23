@@ -23,7 +23,7 @@ public class ObjectAsAttributeMapper<T,W extends ObjectMapper<T>> implements Att
     }
 
     @Override
-    public Object asDBobject(T value) {
+    public Object asDBObject(T value) {
         return mapper.asDBObject(value);
     }
 

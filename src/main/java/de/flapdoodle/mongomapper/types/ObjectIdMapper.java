@@ -12,7 +12,7 @@ public final class ObjectIdMapper implements AttributeMapper<ObjectId> {
     }
 
     @Override
-    public Object asDBobject(ObjectId value) {
+    public Object asDBObject(ObjectId value) {
         return value;
     }
 

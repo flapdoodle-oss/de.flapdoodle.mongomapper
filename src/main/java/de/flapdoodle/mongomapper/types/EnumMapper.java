@@ -18,7 +18,7 @@ public class EnumMapper<E extends Enum<E>> implements AttributeMapper<E> {
     }
 
     @Override
-    public Object asDBobject(E value) {
+    public Object asDBObject(E value) {
         return value.name();
     }
 
