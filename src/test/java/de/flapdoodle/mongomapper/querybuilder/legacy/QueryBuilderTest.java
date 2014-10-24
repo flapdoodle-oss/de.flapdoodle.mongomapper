@@ -1,4 +1,4 @@
-package de.flapdoodle.mongomapper.querybuilder;
+package de.flapdoodle.mongomapper.querybuilder.legacy;
 
 import java.util.regex.Pattern;
 
@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.mongodb.DBObject;
 
 import de.flapdoodle.mongomapper.example.tree.RootMapper;
+import de.flapdoodle.mongomapper.querybuilder.legacy.QueryBuilder;
 
 public class QueryBuilderTest {
 
