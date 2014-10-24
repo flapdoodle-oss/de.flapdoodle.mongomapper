@@ -21,11 +21,15 @@ public class QueryBuilderTest {
             .is(mapper.created().year(), 2013)
             .isNot(mapper.foo(), "nix")
             .is(mapper.bar(), 2)
+            
             .is(mapper.sub().created().year(), 2014)
             .is(mapper.sub().name(), "sunny")
+            
             .regex(mapper.sub().name(), Pattern.compile("[a-z]"))
             .in(mapper.bar(), Lists.newArrayList(2,3,4))
             .get();
+        
+        
         
         System.out.println("query: "+query);
     }
