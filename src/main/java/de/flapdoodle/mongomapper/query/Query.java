@@ -4,4 +4,6 @@ public interface Query {
 
     public String generate();
     
+    public String basicQuery();
+    
 }

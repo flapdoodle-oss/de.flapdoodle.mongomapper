@@ -13,11 +13,19 @@ public final class AtomicAttributeQuery<T> extends AttributeQuery<T>{
 
     @Override
     public String generate() {
-        StringBuffer buffer = new StringBuffer("{\"");
+        StringBuffer buffer = new StringBuffer("{");
+        buffer.append(basicQuery());
+        buffer.append("}");
+        return buffer.toString();
+    }
+
+    @Override
+    public String basicQuery() {
+        StringBuffer buffer = new StringBuffer("\"");
         buffer.append(attribute().name());
         buffer.append("\": \"");
         buffer.append(value);
-        buffer.append("\"}");
+        buffer.append("\"");
         return buffer.toString();
     }
 

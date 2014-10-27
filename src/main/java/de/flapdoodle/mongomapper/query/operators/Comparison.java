@@ -1,7 +1,7 @@
 package de.flapdoodle.mongomapper.query.operators;
 
 public enum Comparison {
-    GT, GTE, LT, LTE, NE;
+    GT, GTE, LT, LTE, NE, SIZE;
     
     @Override
     public String toString(){
