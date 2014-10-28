@@ -16,6 +16,10 @@ public abstract class Properties {
         return new QueryableCascadedProperty<T, VoidProperty>(mapper);
     }
     
+    public static <T, TP, P extends Property<TP, VoidProperty>> QueryableProperty<T, P> queryable(Class<TP> parentType, AttributeMapper<T> mapper) {
+        return new QueryableCascadedProperty<T, P>(mapper);
+    }
+    
     public static <T, P extends Property<?, ? extends Property<?,?>>> CascadedProperty<T, P> with(P parent, AttributeMapper<T> mapper) {
         return new CascadedProperty<T,P>(parent, mapper);
     }
