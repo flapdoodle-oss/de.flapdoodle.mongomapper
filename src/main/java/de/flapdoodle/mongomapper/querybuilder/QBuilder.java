@@ -15,7 +15,7 @@ import de.flapdoodle.mongomapper.query.SquenceQuery;
 import de.flapdoodle.mongomapper.query.operators.ArrayQueryType;
 import de.flapdoodle.mongomapper.query.operators.Comparison;
 import de.flapdoodle.mongomapper.query.operators.LogicalSequence;
-import de.flapdoodle.mongomapper.query.operators.NamedMongoDBOperator;
+import de.flapdoodle.mongomapper.query.operators.NamedMongoOperator;
 
 public class QBuilder<P extends QBuilder<?>> {
 
@@ -33,29 +33,33 @@ public class QBuilder<P extends QBuilder<?>> {
 
     private final List<Query> queryParts;
 
-    private final NamedMongoDBOperator operator;
+    private final NamedMongoOperator operator;
 
-    public QBuilder(NamedMongoDBOperator operator) {
+    private final QuerySpecifcation querySpec;
+
+    public QBuilder(NamedMongoOperator operator) {
         this.parent = Optional.absent();
         this.children = new ArrayList<QBuilder<?>>();
         this.queryParts = new ArrayList<Query>();
         this.operator = operator;
         this.attribute = null;
+        this.querySpec = QuerySpecifcation.SEQUENCE;
     }
 
-    public QBuilder(P parent, NamedMongoDBOperator operator, Attr<?> attribute) {
+    public QBuilder(P parent, NamedMongoOperator operator, Attr<?> attribute, QuerySpecifcation querySpec) {
         this.parent = Optional.of(parent);
         this.children = new ArrayList<QBuilder<?>>();
         this.queryParts = new ArrayList<Query>();
         this.operator = operator;
         this.attribute = attribute;
+        this.querySpec = querySpec;
     }
 
     public Attr<?> attribute() {
         return attribute;
     }
-    
-    public NamedMongoDBOperator operator() {
+
+    public NamedMongoOperator operator() {
         return this.operator;
     }
 
@@ -88,28 +92,31 @@ public class QBuilder<P extends QBuilder<?>> {
         return ImmutableList.copyOf(this.queryParts);
     }
 
-    public <X> ArrayQBuilder oneOrMany(Attr<X> attr) {
+    public <X> QBuilder<QBuilder<P>> oneOrMany(Attr<X> attr) {
         // TODO: Prüfe, ob immer der eigene Sequence-Operator übergeben werden
         // soll.
-        ArrayQBuilder builder = new ArrayQBuilder(this, operator, attr, ArrayQueryType.ELEMMATCH);
+        QBuilder<QBuilder<P>> builder = new QBuilder<QBuilder<P>>(this, ArrayQueryType.ELEMMATCH, attr,
+                QuerySpecifcation.ARRAY);
         children.add(builder);
 
         return builder;
     }
 
-    public <X> ArrayQBuilder all(Attr<X> attr) {
+    public <X> QBuilder<QBuilder<P>> all(Attr<X> attr) {
         // TODO: Prüfe, ob immer der eigene Sequence-Operator übergeben werden
         // soll.
-        ArrayQBuilder builder = new ArrayQBuilder(this, operator, attr, ArrayQueryType.ALL);
+        QBuilder<QBuilder<P>> builder = new QBuilder<QBuilder<P>>(this, ArrayQueryType.ALL, attr,
+                QuerySpecifcation.ARRAY);
         children.add(builder);
 
         return builder;
     }
 
-    public <X> ArrayQBuilder size(Attr<X> attr) {
+    public <X> QBuilder<QBuilder<P>> size(Attr<X> attr) {
         // TODO: Prüfe, ob immer der eigene Sequence-Operator übergeben werden
         // soll.
-        ArrayQBuilder builder = new ArrayQBuilder(this, operator, attr, ArrayQueryType.SIZE);
+        QBuilder<QBuilder<P>> builder = new QBuilder<QBuilder<P>>(this, ArrayQueryType.SIZE, attr,
+                QuerySpecifcation.ARRAY);
         children.add(builder);
 
         return builder;
@@ -119,7 +126,7 @@ public class QBuilder<P extends QBuilder<?>> {
         return this.parent.get();
     }
 
-    Query buildQuery(){
+    Query buildQuery() {
         List<Query> children = new ArrayList<Query>(this.queryParts.size() + this.children.size());
         children.addAll(this.queryParts);
 
@@ -129,9 +136,10 @@ public class QBuilder<P extends QBuilder<?>> {
 
         // TODO: Hier mit Optional arbeiten!
         if (this.attribute != null) {
-            return new ComposedAttributeQuery(this.attribute, new SquenceQuery(this.operator, children, '[', ']', false));
+            return new ComposedAttributeQuery(this.attribute, new SquenceQuery(this.operator, children,
+                    querySpec));
         } else {
-            return new SquenceQuery(this.operator, children, '[', ']', false);
+            return new SquenceQuery(this.operator, children, querySpec);
         }
     }
 

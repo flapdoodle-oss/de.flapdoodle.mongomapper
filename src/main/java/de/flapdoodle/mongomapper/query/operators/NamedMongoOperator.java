@@ -1,6 +1,6 @@
 package de.flapdoodle.mongomapper.query.operators;
 
-public interface NamedMongoDBOperator {
+public interface NamedMongoOperator {
 
     public String name();
 }

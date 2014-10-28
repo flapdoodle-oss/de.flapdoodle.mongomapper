@@ -1,6 +1,6 @@
 package de.flapdoodle.mongomapper.query.operators;
 
-public enum ArrayQueryType implements NamedMongoDBOperator {
+public enum ArrayQueryType implements NamedMongoOperator {
     SIZE, ELEMMATCH, ALL;
 
     @Override

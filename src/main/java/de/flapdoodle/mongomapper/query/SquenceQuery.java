@@ -4,26 +4,21 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import de.flapdoodle.mongomapper.query.operators.NamedMongoDBOperator;
+import de.flapdoodle.mongomapper.query.operators.NamedMongoOperator;
+import de.flapdoodle.mongomapper.querybuilder.QuerySpecifcation;
 
 public class SquenceQuery implements Query {
 
-    private final NamedMongoDBOperator operator;
+    private final NamedMongoOperator operator;
 
     private final ImmutableList<Query> queries;
-    
-    private final char subQueryBracketLeft;
-    
-    private final char subQueryBracketRight;
-    
-    private final boolean useBasicQueries;
 
-    public SquenceQuery(NamedMongoDBOperator operator, List<Query> queries, char subQueryBracketLeft, char subQueryBracketRight, boolean useBasicQueries) {
+    private final QuerySpecifcation querySpec;
+
+    public SquenceQuery(NamedMongoOperator operator, List<Query> queries, QuerySpecifcation querySpec) {
         this.operator = operator;
         this.queries = ImmutableList.<Query> copyOf(queries);
-        this.subQueryBracketLeft = subQueryBracketLeft;
-        this.subQueryBracketRight = subQueryBracketRight;
-        this.useBasicQueries = useBasicQueries;
+        this.querySpec = querySpec;
     }
 
     @Override
@@ -39,18 +34,18 @@ public class SquenceQuery implements Query {
         StringBuffer buffer = new StringBuffer();
         buffer.append(operator.toString());
         buffer.append(": ");
-        buffer.append(subQueryBracketLeft);
+        buffer.append(querySpec.leftBracket());
 
         for (int i = 0; i < queries.size(); i++) {
             Query query = queries.get(i);
-            buffer.append(this.useBasicQueries ? query.basicQuery() : query.generate());
+            buffer.append(this.querySpec.shouldUseSubQueries() ? query.basicQuery() : query.generate());
 
             if (i < (queries.size() - 1)) {
                 buffer.append(", ");
             }
         }
 
-        buffer.append(subQueryBracketRight);
+        buffer.append(querySpec.rightBracket());
         return buffer.toString();
     }
 
