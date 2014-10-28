@@ -1,6 +1,6 @@
 package de.flapdoodle.mongomapper.query.operators;
 
-public enum SubQueryType {
+public enum ArrayQueryType {
     SIZE, ELEMMATCH, ALL;
 
     @Override

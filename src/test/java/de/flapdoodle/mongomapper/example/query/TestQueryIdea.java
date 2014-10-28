@@ -105,12 +105,12 @@ public class TestQueryIdea {
     @Test
     public void equalsQueryWithAllSubquery(){
         final String EQ_QUERY = "{$and: [{\"mittagessen\": \"Spaghetti\"}, {\"eiskarte\": { $all: {\"name\": \"Schokolade\", \"price\": {$gt: 2.0}}}}]}";
-        
+
         Attr<String> attrMittagessen = new Attr<String>("mittagessen");
         // TODO: Ein Attr auf Maps wie? Attribute der Map können unterschiedliche Typen haben.
         Attr<JSONObject> attrEiskarte = new Attr<JSONObject>("eiskarte");
         Attr<Double> attrPrice = new Attr<Double>("price");
-        
+
         String query = QBuilder
                         .start()
                         .is(attrMittagessen, "Spaghetti")
@@ -120,26 +120,26 @@ public class TestQueryIdea {
                             .finish()
                         .asQuery()
                         .generate();
-        
+
         assertEquals(EQ_QUERY, query);
     }
     
     @Test
     public void equalsQueryWithSizeSubquery(){
-        final String EQ_QUERY = "{$and: [{\"mittagessen\": \"Spaghetti\"}, {\"eiskarte\": { $size: 2}}]}";
-        
+        final String EQ_QUERY = "{$and: [{\"mittagessen\": \"Spaghetti\"}, {\"eiskarte\": {$size: 2}}]}";
+
         Attr<String> attrMittagessen = new Attr<String>("mittagessen");
         // TODO: Ein Attr auf Maps wie? Attribute der Map können unterschiedliche Typen haben.
         Attr<JSONObject> attrEiskarte = new Attr<JSONObject>("eiskarte");
         Attr<Double> attrPrice = new Attr<Double>("price");
-        
+
         String query = QBuilder
                         .start()
                         .is(attrMittagessen, "Spaghetti")
-                        .size(attrEiskarte)
+                        .size(attrEiskarte, 2)
                         .asQuery()
                         .generate();
-        
+
         assertEquals(EQ_QUERY, query);
     }
 }

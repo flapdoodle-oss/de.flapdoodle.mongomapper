@@ -2,15 +2,15 @@ package de.flapdoodle.mongomapper.query;
 
 import com.google.common.collect.ImmutableList;
 
-import de.flapdoodle.mongomapper.query.operators.SubQueryType;
+import de.flapdoodle.mongomapper.query.operators.ArrayQueryType;
 
 public class ArrayQuery implements Query {
     
-    private final SubQueryType queryType;
+    private final ArrayQueryType queryType;
     
     private final ImmutableList<Query> subQueries;
     
-    public ArrayQuery(SubQueryType queryType, ImmutableList<Query> subQuery){
+    public ArrayQuery(ArrayQueryType queryType, ImmutableList<Query> subQuery){
         this.queryType = queryType;
         this.subQueries = subQuery;
     }
