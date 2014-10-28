@@ -15,6 +15,7 @@ import de.flapdoodle.mongomapper.query.SquenceQuery;
 import de.flapdoodle.mongomapper.query.operators.ArrayQueryType;
 import de.flapdoodle.mongomapper.query.operators.Comparison;
 import de.flapdoodle.mongomapper.query.operators.LogicalSequence;
+import de.flapdoodle.mongomapper.query.operators.NamedMongoDBOperator;
 
 public class QBuilder<P extends QBuilder<?>> {
 
@@ -32,9 +33,9 @@ public class QBuilder<P extends QBuilder<?>> {
 
     private final List<Query> queryParts;
 
-    private final LogicalSequence operator;
+    private final NamedMongoDBOperator operator;
 
-    public QBuilder(LogicalSequence operator) {
+    public QBuilder(NamedMongoDBOperator operator) {
         this.parent = Optional.absent();
         this.children = new ArrayList<QBuilder<?>>();
         this.queryParts = new ArrayList<Query>();
@@ -42,7 +43,7 @@ public class QBuilder<P extends QBuilder<?>> {
         this.attribute = null;
     }
 
-    public QBuilder(P parent, LogicalSequence operator, Attr<?> attribute) {
+    public QBuilder(P parent, NamedMongoDBOperator operator, Attr<?> attribute) {
         this.parent = Optional.of(parent);
         this.children = new ArrayList<QBuilder<?>>();
         this.queryParts = new ArrayList<Query>();
@@ -52,6 +53,10 @@ public class QBuilder<P extends QBuilder<?>> {
 
     public Attr<?> attribute() {
         return attribute;
+    }
+    
+    public NamedMongoDBOperator operator() {
+        return this.operator;
     }
 
     public static QBuilder<VoidBuilder> start() {
@@ -73,8 +78,8 @@ public class QBuilder<P extends QBuilder<?>> {
         return this;
     }
 
-    public <Type extends ImmutableList<?>> QBuilder<? extends P> size(Attr<?> attribute, int size) {
-        queryParts.add(new ComposedAttributeQuery(attribute, new OperatorQuery<Integer>(size,
+    public <Type extends ImmutableList<?>> QBuilder<? extends P> size(Attr<Type> attribute, int size) {
+        queryParts.add(new ComposedAttributeQuery<Type>(attribute, new OperatorQuery<Integer>(size,
                 Comparison.SIZE)));
         return this;
     }
@@ -113,7 +118,7 @@ public class QBuilder<P extends QBuilder<?>> {
     public P finish() {
         return this.parent.get();
     }
-    
+
     Query buildQuery(){
         List<Query> children = new ArrayList<Query>(this.queryParts.size() + this.children.size());
         children.addAll(this.queryParts);
@@ -124,9 +129,9 @@ public class QBuilder<P extends QBuilder<?>> {
 
         // TODO: Hier mit Optional arbeiten!
         if (this.attribute != null) {
-            return new ComposedAttributeQuery(this.attribute, new SquenceQuery(this.operator, children));
+            return new ComposedAttributeQuery(this.attribute, new SquenceQuery(this.operator, children, '[', ']', false));
         } else {
-            return new SquenceQuery(this.operator, children);
+            return new SquenceQuery(this.operator, children, '[', ']', false);
         }
     }
 

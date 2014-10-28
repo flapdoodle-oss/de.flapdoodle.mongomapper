@@ -1,6 +1,6 @@
 package de.flapdoodle.mongomapper.query.operators;
 
-public enum Comparison {
+public enum Comparison implements NamedMongoDBOperator {
     GT, GTE, LT, LTE, NE, SIZE;
     
     @Override

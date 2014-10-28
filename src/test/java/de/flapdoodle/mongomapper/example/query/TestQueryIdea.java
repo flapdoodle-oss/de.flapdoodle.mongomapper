@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableList;
+
 import de.flapdoodle.mongomapper.Attr;
 import de.flapdoodle.mongomapper.querybuilder.QBuilder;
 
@@ -82,7 +84,7 @@ public class TestQueryIdea {
     
     @Test
     public void equalsQueryWithOneOreManySubquery(){
-        final String EQ_QUERY = "{$and: [{\"mittagessen\": \"Spaghetti\"}, {\"eiskarte\": { $elemMatch: {\"name\": \"Schokolade\", \"price\": {$gt: 2.0}}}}]}";
+        final String EQ_QUERY = "{$and: [{\"mittagessen\": \"Spaghetti\"}, {\"eiskarte\": {$elemMatch: {\"name\": \"Schokolade\", \"price\": {$gt: 2.0}}}}]}";
         
         Attr<String> attrMittagessen = new Attr<String>("mittagessen");
         // TODO: Ein Attr auf Maps wie? Attribute der Map können unterschiedliche Typen haben.
@@ -104,7 +106,7 @@ public class TestQueryIdea {
     
     @Test
     public void equalsQueryWithAllSubquery(){
-        final String EQ_QUERY = "{$and: [{\"mittagessen\": \"Spaghetti\"}, {\"eiskarte\": { $all: {\"name\": \"Schokolade\", \"price\": {$gt: 2.0}}}}]}";
+        final String EQ_QUERY = "{$and: [{\"mittagessen\": \"Spaghetti\"}, {\"eiskarte\": {$all: {\"name\": \"Schokolade\", \"price\": {$gt: 2.0}}}}]}";
 
         Attr<String> attrMittagessen = new Attr<String>("mittagessen");
         // TODO: Ein Attr auf Maps wie? Attribute der Map können unterschiedliche Typen haben.
@@ -124,13 +126,17 @@ public class TestQueryIdea {
         assertEquals(EQ_QUERY, query);
     }
     
+    private static class Eiskarte {
+        
+    }
+    
     @Test
     public void equalsQueryWithSizeSubquery(){
         final String EQ_QUERY = "{$and: [{\"mittagessen\": \"Spaghetti\"}, {\"eiskarte\": {$size: 2}}]}";
 
         Attr<String> attrMittagessen = new Attr<String>("mittagessen");
         // TODO: Ein Attr auf Maps wie? Attribute der Map können unterschiedliche Typen haben.
-        Attr<JSONObject> attrEiskarte = new Attr<JSONObject>("eiskarte");
+        Attr<ImmutableList<Eiskarte>> attrEiskarte = new Attr<ImmutableList<Eiskarte>>("eiskarte");
         Attr<Double> attrPrice = new Attr<Double>("price");
 
         String query = QBuilder

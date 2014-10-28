@@ -1,6 +1,6 @@
 package de.flapdoodle.mongomapper.query.operators;
 
-public enum LogicalSequence {
+public enum LogicalSequence implements NamedMongoDBOperator {
     AND, OR;
     
     @Override
