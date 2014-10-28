@@ -7,5 +7,5 @@ public interface Property<T,P extends Property<?, ?>> {
     Optional<P> parentProperty();
 
     String propertyName();
-    
+
 }
